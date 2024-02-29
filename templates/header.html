@@ -1,0 +1,66 @@
+{% load static %}
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-light d-none d-lg-block">
+      <div class="row py-2 px-lg-5">
+          <div class="col-lg-6 text-left mb-2 mb-lg-0">
+              <div class="d-inline-flex align-items-center">
+                  <small><i class="fa fa-phone-alt mr-2"></i>+55 11 951864397</small>
+                  <small class="px-3">|</small>
+                  <small><i class="fa fa-envelope mr-2"></i>mr.michelerocha@gmail.com</small>
+              </div>
+          </div>
+          <div class="col-lg-6 text-right">
+              <div class="d-inline-flex align-items-center">
+                  <a class="text-primary px-2" href="https://www.facebook.com/winner.mukhtalif">
+                      <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a class="text-primary px-2" href="https://twitter.com/mr_michelerocha">
+                      <i class="fab fa-twitter"></i>
+                  </a>
+                  <a class="text-primary px-2" href="https://www.linkedin.com/in/enc-michele-rocha/">
+                      <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a class="text-primary px-2" href="https://www.instagram.com/mr.michelerocha/">
+                      <i class="fab fa-instagram"></i>
+                  </a>
+                    <!--  <a class="text-primary pl-2" href="">
+                      <i class="fab fa-youtube"></i>
+                  </a> -->
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- Topbar End -->
+
+
+  <!-- Navbar Start -->
+  <div class="container-fluid p-0">
+      <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+          <a href="/index" class="navbar-brand ml-lg-3">
+              <h1 class="m-0 text-primary"><span class="text-dark">Agentes</span> Financeiros</h1>
+          </a>
+          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
+            <div class="navbar-nav m-auto py-0">
+                <a href="/index" class="nav-item nav-link active">Home</a>
+                <a href="/about" class="nav-item nav-link">Sobre nós</a>
+                <a href="/price" class="nav-item nav-link">Preços</a>
+                {% if user.is_authenticated %}
+                    <a href="/definition" class="nav-item nav-link">Explicação</a>
+                    <a href="/finance" class="nav-item nav-link">Recomendação</a>
+                {% else %}
+                    
+                {% endif %}
+            </div>
+            {% if user.is_authenticated %}
+                <a href="/profile" class="btn btn-primary d-none d-lg-block">Perfil</a>
+            {% else %}
+                <a href="/register" class="btn btn-primary d-none d-lg-block">Cadastro</a>
+                <a href="/login" class="btn btn-primary d-none d-lg-block">Login</a>
+            {% endif %}
+          </div>
+      </nav>
+  </div>
+  <!-- Navbar End -->

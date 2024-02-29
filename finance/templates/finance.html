@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block titulo %}
+  Página inicial
+{% endblock %}
+{% block conteudo %}
+
+<div class="album py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1>Recomendação de Ações Consolidadas:</h1>
+            <p>Explicação do que são essas ações consolidadas.</p>
+        </div>        
+        <div class="row">
+            {% for acao in acoes %}
+                {% if acao.tipo_selecao.nome == 'consolidadas' %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body" style="background-color: #FF5E14; border: 2px; border-radius: 5px;">
+                            <h5 class="card-title">{{ acao.nome }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="text-center">
+            <h1>Recomendação de Ações Subvalorizadas:</h1>
+            <p>Explicação do que são essas ações subvalorizadas.</p>
+        </div>
+        <div class="row">
+            {% for acao in acoes %}
+                {% if acao.tipo_selecao.nome == 'subvalorizadas' %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body" style="background-color: #85fd81; border: 2px; border-radius: 5px;">
+                            <h5 class="card-title">{{ acao.nome }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>   
+    <div style="text-align: center;">
+        <a href="https://buy.stripe.com/5kA4jX7Fze4ZdYAfZA" class="btn btn-primary" target="_blank" style="color: black; padding: 10px 50px; border: 2px; border-radius: 5px;">Compre nosso Relatorio Diario</a>
+    </div>
+
+</div>
+
+{% endblock %}
