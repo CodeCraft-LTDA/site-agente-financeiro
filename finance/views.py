@@ -99,7 +99,7 @@ def pdf_by_date(request, year, month, day):
             response['Content-Disposition'] = 'inline; filename="{}"'.format(pdf_file.file.name)
             return response   
     else:
-        return HttpResponse("Eu não sou otaria.", status=403)
+        return HttpResponse("Eu sou otaria.", status=403)
 
     
 def redirect_to_today_pdf(request):
