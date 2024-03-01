@@ -14,10 +14,9 @@ class PDFFile(models.Model):
 class AcessoPDF(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     data_acesso = models.DateField()
-    pdf_file = models.ForeignKey(PDFFile, on_delete=models.CASCADE, null=True)
 
     class Meta:
-        unique_together = ('usuario', 'data_acesso', 'pdf_file')
+        unique_together = ('usuario', 'data_acesso')
 
 class Acao(models.Model):
     DIRECAO_CHOICES = [
