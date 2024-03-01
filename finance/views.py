@@ -96,13 +96,15 @@ def pdf_by_date(request, year, month, day):
         return HttpResponse("PDF não encontrado para a data especificada.", status=403)
         # raise Http404("PDF não encontrado para a data especificada.")
     
-    # Registra o acesso antes de fornecer o arquivo
-    AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
-    
     file_path = pdf_file.file.path
     with open(file_path, 'rb') as pdf:
         response = HttpResponse(pdf.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="{}"'.format(pdf_file.file.name)
+        
+        # Registra o acesso após verificar a autenticidade e antes de retornar a resposta
+        if not request.session.pop('redirected_to_today_pdf', None) and not acesso_existente:
+            AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
+    
         return response
     
 def redirect_to_today_pdf(request):
