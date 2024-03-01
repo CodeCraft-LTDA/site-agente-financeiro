@@ -77,35 +77,32 @@ def pdf_by_date(request, year, month, day):
     data_especificada = datetime.date(year, month, day)
     hoje = datetime.date.today()
     
-    if not request.session.pop('redirected_to_today_pdf', None):
+    # Verificação inicial para acesso não autorizado
+    if not request.session.get('redirected_to_today_pdf', False):
         return HttpResponse("Acesso não autorizado.", status=403)
 
     if data_especificada != hoje:
         return HttpResponse("Acesso apenas para o dia corrente.", status=403)
-        # raise Http404("Acesso apenas para o dia corrente.")
 
     # Verifica se já existe um acesso registrado para hoje
-    acesso_existente = AcessoPDF.objects.filter(usuario=request.user, data_acesso=hoje).exists()
-    if acesso_existente:
-        # Redireciona ou retorna erro, pois o acesso diário já foi utilizado
+    if AcessoPDF.objects.filter(usuario=request.user, data_acesso=hoje).exists():
         return HttpResponse("Acesso ao PDF já realizado hoje.", status=403)
 
     try:
         pdf_file = PDFFile.objects.get(upload_date=data_especificada)
     except PDFFile.DoesNotExist:
         return HttpResponse("PDF não encontrado para a data especificada.", status=403)
-        # raise Http404("PDF não encontrado para a data especificada.")
     
+    # Registra o acesso antes de fornecer o arquivo, agora garantindo que isso ocorra na sequência correta
+    AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
+    
+    # Remove a flag da sessão após todas as verificações terem passado
+    request.session.pop('redirected_to_today_pdf', None)
+
     file_path = pdf_file.file.path
     with open(file_path, 'rb') as pdf:
         response = HttpResponse(pdf.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="{}"'.format(pdf_file.file.name)
-        
-         # Registra o acesso após verificar a autenticidade e antes de retornar a resposta
-        if not acesso_existente:
-            AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
-    
-        
+        response['Content-Disposition'] = f'inline; filename="{pdf_file.file.name}"'
         return response
     
 def redirect_to_today_pdf(request):
