@@ -101,10 +101,11 @@ def pdf_by_date(request, year, month, day):
         response = HttpResponse(pdf.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="{}"'.format(pdf_file.file.name)
         
-        # Registra o acesso após verificar a autenticidade e antes de retornar a resposta
-        if not request.session.pop('redirected_to_today_pdf', None) and not acesso_existente:
+         # Registra o acesso após verificar a autenticidade e antes de retornar a resposta
+        if not acesso_existente:
             AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
     
+        
         return response
     
 def redirect_to_today_pdf(request):
