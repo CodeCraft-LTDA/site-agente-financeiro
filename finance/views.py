@@ -76,9 +76,13 @@ def logout_view(request):
 def pdf_by_date(request, year, month, day):
     data_especificada = datetime.date(year, month, day)
     hoje = datetime.date.today()
+    
+    if not request.session.pop('redirected_to_today_pdf', None):
+        return HttpResponse("Acesso não autorizado.", status=403)
 
     if data_especificada != hoje:
-        raise Http404("Acesso apenas para o dia corrente.")
+        return HttpResponse("Acesso apenas para o dia corrente.", status=403)
+        # raise Http404("Acesso apenas para o dia corrente.")
 
     # Verifica se já existe um acesso registrado para hoje
     acesso_existente = AcessoPDF.objects.filter(usuario=request.user, data_acesso=hoje).exists()
@@ -89,7 +93,8 @@ def pdf_by_date(request, year, month, day):
     try:
         pdf_file = PDFFile.objects.get(upload_date=data_especificada)
     except PDFFile.DoesNotExist:
-        raise Http404("PDF não encontrado para a data especificada.")
+        return HttpResponse("PDF não encontrado para a data especificada.", status=403)
+        # raise Http404("PDF não encontrado para a data especificada.")
     
     # Registra o acesso antes de fornecer o arquivo
     AcessoPDF.objects.create(usuario=request.user, data_acesso=hoje, pdf_file=pdf_file)
@@ -102,4 +107,5 @@ def pdf_by_date(request, year, month, day):
     
 def redirect_to_today_pdf(request):
     today = datetime.date.today()
+    request.session['redirected_to_today_pdf'] = True
     return HttpResponseRedirect(reverse('pdf_by_date', args=(today.year, today.month, today.day)))
