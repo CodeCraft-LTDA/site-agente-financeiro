@@ -74,3 +74,9 @@ https://getbootstrap.com/docs/4.1/examples/
 view-source:(endereço)
 // css da pagina 
 view-source:(endereço)(neme arquivo css).css
+
+
+// como colocar https na aws
+https://www.youtube.com/watch?v=P5Tkhvx1NoM&ab_channel=TalhaAnwar
+
+
